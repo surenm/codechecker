@@ -1,0 +1,60 @@
+{% extends 'table.html' %}
+
+{% block header %}
+<h3> Problem : {{ problem_code }} </h3>
+{% endblock %}
+{% block links %}
+<div id="links">
+    <a href = "/site/problems/{{ problem }}/" id="view">View Problem</a>
+    <a href = "/site/problems/{{ problem }}/submit/" id="submit">Submit</a>
+    <a href = "/site/problems/{{ problem }}/submissions/" id="submissions">All Submissions</a>
+    <a href = "/site/problems/{{ problem }}/my_submissions/" id="my_submissions">My Submissions</a>
+</div>
+    <script type="text/javascript">
+    var linkNode = document.getElementById("{{ section }}");
+    linkNode.className = "selected";
+    </script>
+{% endblock %}
+
+{% block main_content %}
+
+{% ifequal section "view" %}
+{% autoescape off %}
+{% if problem_statement %}
+{{ problem_statement }}
+<div class ="constraints"> <h4> Constraints: </h4> {{ problem_notes }}</div>
+<div class ="data">
+    <h4> Sample Input: </h4>
+    <pre>{{ input_data }}</pre>
+    <h4> Sample Output: </h4>
+    <pre>{{ output_data }}</pre>
+    <h4> Time Limit: {{ tlimit }} sec <br>
+      Memory Limit: {{ mlimit }} MB</h4> 
+</div>
+
+{% endif %}
+{% endautoescape %}
+{% endifequal %}
+
+{% ifequal section "submit" %}
+{% if form %}
+<form action="/site/problems/{{ problem }}/submit/" method="post">
+    <center>
+        <table> 
+            <tr> <td> <label for="id_submissionLang"> Language : </label></td> <td> {{ form.SubmissionLang }} </td> </tr>
+            <tr> <td> <label for="id_submissionCode"> Code : </label> {{ form.SubmissionCode.errors }}</td> <td align=center> {{ form.SubmissionCode }}</td> </tr>
+            <tr> <td> </td><td align=center> <input type="submit" value="Submit" /> </td></tr>
+        </table>
+    </center>
+</form>
+{% endif %}
+{% endifequal %}
+{% ifequal section "submissions" %}
+{{ block.super }}
+{% endifequal %}
+{% ifequal section "my_submissions" %}
+{{ block.super }}
+{% endifequal %}
+{% endblock %}
+
+

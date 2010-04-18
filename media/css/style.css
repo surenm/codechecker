@@ -1,0 +1,228 @@
+body{
+    background:#F4DDB1;
+    font: 10pt/14pt 'Lucida Grande', Verdana, Helvetica, sans-serif; 
+}
+
+#header{
+    background:url(/media/img/site/headerbg.gif) no-repeat #F4DDB1 top left;
+    width:15%;
+    height:439px;
+    margin-left:1%;
+    margin-right:auto;
+    margin-bottom:0;
+    text-align:right;
+    float:left;
+}
+
+.header{
+    text-align: center;
+}
+
+#wrap{
+}
+
+#container{
+    background:#F8EBD2;
+    width: 65%;
+    /*margin-left:282px; 
+    margin-top:-452px; */
+    float:left;
+
+}
+
+
+#navcontainer{
+    float: left;
+    margin-top: 1%;
+    margin-left: 1%;
+    width: 15%;
+}
+
+#navlist {
+    margin-top: 10%;
+}
+#navlist li{
+    list-style-type: none;
+    text-align:right;
+    padding-right: 20px;
+    font-family: 'Lucida Grande', Verdana, Helvetica, sans-serif;
+    font-size:14px;
+    line-height: 1.4em;
+    color:#666666;
+}
+
+#navlist li a:link { color:  #275A78; text-decoration:none; }
+#navlist li a:visited { color: #275A78; text-decoration:none; }
+#navlist li a:hover {color: #666666; text-decoration:none; }
+
+h1{
+    font-size: 25px;
+    font-weight: bold;
+    color: #275A78;
+}
+
+h2{
+    font-size: 23px;
+    font-weight: bold;
+    color: #275A78;
+}
+
+h3{
+    font-size:21px;
+    font-weight:bold;
+    color: #275A78;
+}
+
+h4{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px;
+    color: #275A78;
+}
+
+.content {
+    padding: 10px;
+    text-align: justify;
+    font: 9pt/14pt;
+}
+
+.main_content{
+    padding: 30px;
+    text-align: left;
+    font: 11pt/14pt 'Lucida Grande', Verdana, Helvetica, sans-serif;
+    min-height: 400px;  
+}
+
+#breadcrumbs{
+    font: 9pt/14pt 'Lucida Grande', Verdana, Helvetica, sans-serif;
+    color: gray;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dddddd;
+}
+
+#breadcrumbs .closer{
+    letter-spacing: -3px;
+}
+
+#breadcrumbs a{
+    text-decoration: none;
+    font-size: 1.1em;
+    padding-right: 5px;
+}
+
+#greeting {
+    font: 9pt/14pt 'Lucida Grande', Verdana, Helvetica, sans-serif;
+    color: gray;
+    float: right;
+}
+#greeting a{
+    text-decoration: none;
+}
+
+#footer{
+    background:transparent;
+    height:66px;
+    text-align:center;
+    font: 8pt/14pt 'Lucida Grande', Verdana, Helvetica, sans-serif;
+    color:#333333;
+}
+
+#title{
+    font: 16pt/14pt 'Lucida Grande', Verdana, Helvetica, sans-serif;
+    text-align: right;
+    margin-right: 8%;
+    font-size: 25px;
+    color:#275A78;
+}
+
+#title a{ 
+    text-decoration: none;
+    color: #275A78;
+}
+
+.tableview{
+    width : 200px;
+    border: 1px solid gray;
+}
+
+/* Data Table Content*/
+.zebra{
+   /* border-collapse:collapse; */
+    font-size:12px;
+    text-align:center;
+    width: 85%;
+    border: #555555;
+}
+
+.zebra th{
+    color:#cccccc;
+    background: #555555;
+    font-size:14px;
+    font-weight: bold;
+    padding:10px 8px;
+}
+
+.zebra td{
+    color:#000000;
+    padding:8px;
+}
+
+.zebra .odd{
+    background: #F4DDB1 none repeat scroll 0 0;
+}
+.zebra .green {
+    background: #00C030 none repeat scroll 0 0;
+}
+
+.zebra .orange {
+    background: #F09A24 none repeat scroll 0 0;
+}
+
+.zebra .grey {
+    background: #DDDDDD none repeat scroll 0 0;
+}
+
+.zebra a{
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+/* Links */
+#links{
+    padding-top: 10px;
+    text-align: center;
+}
+
+#links a{
+    -moz-background-clip:border;
+    -moz-background-inline-policy:continuous;
+    -moz-background-origin:padding;
+    background:#555555 none repeat scroll 0 0;
+    color:#CCCCCC;
+    font-size:14px;
+    font-weight:bold;
+    padding:10px 8px;
+    text-decoration: none;
+}
+
+#links .selected{
+    color:#555555;
+    background: #CCCCCC;
+}
+
+
+/* Pagination */
+.pagination{
+    height: 50px;
+    padding: 10px;
+
+}
+.pagination span{
+    padding: 0px 20px 0px 20px;
+    font-size: 1em;
+    vertical-align: text-top;
+}
+
+img{
+    border: 0;
+}

@@ -1,0 +1,31 @@
+{% extends 'table.html' %}
+
+{% block header %}
+<h3> Contest : {{ title }} </h3>
+{% endblock %}
+{% block links %}
+
+<div id="links">
+    <a href = "/site/contests/{{ contest }}/description/" id="description">Description</a>
+    <a href = "/site/contests/{{ contest }}/problems" id="problems">Problems</a>
+    <a href = "/site/contests/{{ contest }}/ranklist" id="ranklist">Ranklist</a>
+    <a href = "/site/contests/{{ contest }}/submissions" id="submissions">Submissions</a>
+    <a href = "/site/contests/{{ contest }}/my_submissions" id="my-submissions">My Submissions</a>
+    <script type="text/javascript">
+        var linkNode = document.getElementById("{{ section }}");
+        linkNode.className = "selected";
+    </script>
+</div>
+{% endblock %}
+
+{% block main_content %}
+{% autoescape off %}
+{% ifequal section "description" %}
+{{ description }}
+{% endifequal %}
+{% ifnotequal section "description" %}
+{{ block.super }}
+{% endifnotequal %}
+{% endautoescape %}
+{% endblock %}
+

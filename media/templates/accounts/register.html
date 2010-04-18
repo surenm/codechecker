@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+{% if message %}
+{{ message }}
+{% endif %}
+{% if form %}
+<form method="post" action="/site/register/">
+<table>
+{{ form.as_table }}
+<tr> <td> <input type="submit" value="Register"/> </td> </tr>
+</table>
+</form>
+{% endif %}
+{% endblock %}
