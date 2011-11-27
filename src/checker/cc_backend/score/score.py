@@ -1,0 +1,3 @@
+
+class Score:
+    pass

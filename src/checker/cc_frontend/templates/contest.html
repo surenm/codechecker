@@ -1,0 +1,36 @@
+{% extends stylesheet %}
+
+{% block header %}
+ - {{ title }} Contest
+{% endblock %}
+
+{% block sidebar %}
+<div id="links">
+    <ul>
+    	<li><a href="{{ prefix }}/contests/{{ contest_id }}/" > {{ contest_name }} </a><br /></li>
+    	<li><a href="{{ prefix }}/contests/{{ contest_id }}/announcements/" > Announcements </a> <br /></li>
+        <li><a href="{{ prefix }}/contests/{{ contest_id }}/rules/" > Rules </a> <br /></li>
+        <li><a href="{{ prefix }}/contests/{{ contest_id }}/problems/" > Problems </a> <br /></li>
+        <li><a href="{{ prefix }}/submissions/contest-{{ contest_id }}/" > Judge Status  </a> <br /></li>
+        <li><a href="{{ prefix }}/my-submissions/contest-{{ contest_id }}/" > My Submissions  </a> <br /></li>
+        <li><a href="{{ prefix }}/contests/{{ contest_id }}/ranklist/" > Leader Board  </a> <br /></li>
+    </ul>
+    <script type="text/javascript">
+        var linkNode = document.getElementById("{{ section }}");
+        linkNode.className = "selected";
+    </script>
+</div>
+{% endblock %}
+
+{% block mainblock %}
+{% autoescape off %}
+{% if table_data %} 
+{{ block.super }}
+{% endif %}
+
+{% if content_data %}
+{{ content_data }}
+{% endif %}
+
+{% endautoescape %}
+{% endblock %}

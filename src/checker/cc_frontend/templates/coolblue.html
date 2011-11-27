@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+
+        <title> Codechecker  {% block header %}  {% endblock %}  </title>
+
+        <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+        <meta name="author" content="Erwin Aligam - styleshout.com" />
+        <meta name="description" content="codechecker" />
+        <meta name="keywords" content="codechecker, django, python" />
+        <meta name="robots" content="index, follow, noarchive" />
+        <meta name="googlebot" content="noarchive" />
+
+        <link rel="stylesheet" type="text/css" media="screen" href="{{media_url_prefix}}/styles/coolblue/css/screen.css" />
+
+    </head>
+
+    <body>
+
+        <!--header -->
+        <div id="header-wrap"><div id="header">
+
+                <a name="top"></a>
+
+                <h1 id="logo-text">
+                    <a href="index.html" title="">
+                        {% if site_name %} 
+                        {{ site_name }} 
+                        {% else %}
+                        CodeChecker
+                        {% endif %}
+                    </a>
+                </h1>
+
+                <p id="slogan"> 
+                {% if site_slogan %} 
+                {{ site_name }} 
+                {% else %}
+                Happy hacking ...
+                {% endif %}
+                </p>
+
+                <div  id="nav">
+                    <ul>
+                        <li id="current"><a href="{{ prefix }}/">Home</a></li>
+                        <li><a href="{{ prefix }}/news/"> News </a></li>
+                        <li><a href="{{ prefix }}/register/"> Register </a></li>
+                        <li><a href="{{ prefix }}/about/"> About </a></li>
+                        <li><a href="{{ prefix }}/references/" >References</a> </li>
+                    </ul>
+                </div>
+
+                <p id="login"> 
+                {% if user.is_authenticated %}
+                Welcome, <a href="#"> {{ user.username }} !</a>
+                {% else %} 
+                <a href="{{prefix}}/login/"> Log in </a> / <a href="{{prefix}}/register"> Register </a>
+                {% endif %}
+                </p> 
+
+                <!--/header-->
+        </div></div>
+
+        <!-- content-outer -->
+        <div id="content-wrap" class="clear" >
+
+            <!-- content -->
+            <div id="content">
+
+                <!-- main -->
+                <div id="main">
+					<!-- <div id="breadcrumbs"> {% block breadcrumbs %} <a href="#"> Testing </a> {% endblock %} </div> -->
+
+                    <div class="post">
+                        {% block mainblock %}
+
+                        <h3><a href="#"> What does it do </a></h3>
+						<p>    Codechecker is an automated judge system to conduct
+                    		programming contests. It has a mechanism to submit
+                    		problem solutions, have them judged fully
+                    		automatically and provides (web) interfaces for
+                    		teams, the jury and the general public. 
+                    	</p>
+                    	
+                    	<h3><a href="#"> How does it work </a></h3>
+                    	<p> 
+                    		It contains two major parts:
+							<ol>
+   							<li> A backend program (the Code Checker) that processes programs submitted by participants by running them against a predefined set of test cases, and reporting results into a database. </li>
+   							<li> Frontend code that is django based and contains a website interface for participants to read the problems, submit solutions to them, see the results of the Code Checker and their position in the ranklist. </li>
+   							</ol> 
+                        <p>
+                        
+                        <h3><a href="#"> Prerequisites </a></h3>
+                        <p>
+                        	Software required:
+							<ul>
+    						<li> A GNU/Linux installation, but the instructions here may be Ubuntu specific. </li>
+    						<li> Apache webserver </li>
+    						<li> Python 2.6.4 (may work with earlier, but not tested, same for the rest.) </li>
+    						<li> MySQL </li>
+    						<li> Django 1.1.1 </li>
+    						<li> Mod-Python </li>
+    						<li> python-mysql (Mysql interface for python) </li>
+                        </p>
+                        <a class="more" href="/active/">Active Contests &raquo;</a></p>
+						<a class="more" href="/register/">Register &raquo;</a></p>
+                        {% endblock %}
+                    </div>
+
+                    <!-- /main -->
+                </div>
+
+                <!-- sidebar -->
+                <div id="sidebar">
+                    <div class="sidemenu">
+
+                        {% block sidebar %} 
+
+                        <ul>
+                            <li><a href="{{ prefix }}/contests/" > Contests </a><br /></li>
+                            <li><a href="{{ prefix }}/problems/" > Problems </a> <br /></li>
+                            <li><a href="{{ prefix }}/status/" >Judge Status</a> <br /></li>
+                            <li><a href="{{ prefix }}/announcements/" >Announcements</a><br /></li>
+                        </ul>
+
+                        {% endblock %}
+                    </div>
+
+                    <!-- /sidebar -->
+                </div>
+
+                <!-- content -->
+            </div>
+
+            <!-- /content-out -->
+        </div>
+
+
+
+        <!-- footer-bottom -->
+        <div id="footer-bottom">
+
+            <p class="bottom-left">
+            &copy; 2010 <strong>Codechecker Project</strong>&nbsp; &nbsp; &nbsp;
+            </p>
+
+            <p class="bottom-right">
+            <a href="http://github.com/surenm/codechecker"> <strong> Codechecker <strong>on GitHub</a> |
+            <a href="http://www.djangoproject.com">Django</a>	|
+            <strong><a href="#top">Back to Top</a></strong>
+            </p>
+
+            <!-- /footer-bottom-->
+        </div>
+
+    </body>
+</html>

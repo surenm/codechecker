@@ -1,0 +1,38 @@
+{% extends stylesheet %}
+
+{% block mainblock %}
+{% autoescape off %}
+{% if table_data %}
+<table> 
+    <thead><tr>
+        {% for col in table_head_row %}
+        	<th> 
+	  			{% if col.link %} 
+          			<a href="{{ col.link }}">{{ col.name }}</a>
+          		{% else %}
+          			{{ col.name }}
+          		{% endif %}
+			</th>    
+        {% empty %}
+        {% endfor %}
+    </tr></thead>
+    {% for table_row in table_rows %}
+    	<tr>
+        	{% for col in table_row.items %}
+        	<td> 
+            	{% if col.link %} 
+        	    	<a href="{{ col.link }}">{{ col.value }}</a>
+            	{% else %}
+            		{{ col.value }}
+            	{% endif %}
+        	</td>
+        	{% endfor %}
+    	</tr>
+    {% empty %} 
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if content
+{% endautoescape %}
+{% endblock %}

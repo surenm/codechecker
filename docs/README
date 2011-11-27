@@ -1,0 +1,38 @@
+This document explains how the codechecker works.
+
+The codechecker start executing from Main.py. This Main program simply
+waits for a submission with status = "queued" to appear. When this
+happens, it picks up the submission, changes it to status =
+"processing" (atomically - many other codechecker threads can be
+running) and starts processing it.
+
+Some terminology about test cases:
+     
+1) Testcase - a testcase is an input file for a single run of a
+submission.
+
+2) Test_group - a collection of one or more testcases that are scored
+together, associated with a score. Eg: If a program passes all
+testcases in a test_group it can get the points for that
+test_group. If it does not pass all testcases, the submission could
+get no points.
+
+3) Result checker - a program submitted by a problem setter that is
+used to check the result of a testcase run by a custom algorithm. This
+program is required only for problems that need a custom result
+verification algorithm. If the result for a testcase is unique, it is
+sufficient to use a reference output file and see that the testcase
+run produces the same output file.
+
+Processing consists of first compiling the submission, and generating
+an executable. Once this is done, the Evaluation module
+begins. Evaluation consists of testing the submission against a set of
+test_groups. Each test_group is fetched in order and the testing for
+the testcases in that test group begins. The submission is executed
+against each testcase by the Secure Execution module (SE). The
+Evaluation module also checks the result of each testcase run with
+either a reference output file for that testcase or a Result_checker
+program. The Result_checker also runs in the SE module.
+
+
+

@@ -1,0 +1,17 @@
+[django]
+TIME_ZONE=Asia/Kolkata
+MEDIA_URL=http://localhost/media/
+ADMIN_MEDIA_PREFIX=http://localhost/media/
+STYLESHEET=coolblue
+
+[database]
+DATABASE_ENGINE=
+DATABASE_NAME=
+DATABASE_USER=
+DATABASE_PASSWORD=
+
+[apache]
+BASE_URL=/site/
+SERVERNAME=localhost
+SERVERALIAS=checker.example.com
+
