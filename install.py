@@ -56,12 +56,16 @@ ret_code = os.system( "python setup.py install" )
 if not ret_code == 0 :
     sys.exit(ret_code)
 
-
 # copy the codechecker.conf to @prefix/etc/checker
 shutil.copy( os.path.join( os.getcwd(), 'conf/codechecker.conf'), os.path.join( backend_conf, 'codechecker.conf' ) )
 
 # copy the apache conf file
 shutil.copy( os.path.join( os.getcwd(), 'conf/django.conf'), os.path.join( frontend_conf, 'django.conf') )
+
+# set permissions
+os.system('sudo chmod -R 750 %s' % backend_conf)
+os.system('sudo chmod -R 750 %s' % frontend_conf)
+
 
 # copy the media folder to /usr/local/share/checker/media
 # and remove it if already present 
@@ -85,6 +89,16 @@ shutil.copytree(os.getcwd() + '/media', '/var/www/media/' )
 # copy secexec to /usr/local/bin
 os.system('sudo bash ./build_secexec.sh')
 
+# mount bind stuff for jail
+dirs = [ 'bin', 'etc', 'lib', 'opt', 'proc', 'sbin', 'usr', 'var']
+for dir in dirs:
+    os.system('sudo umount /jail/%s' % dir)
+    os.system('sudo mkdir -p /jail/%s' % dir)
+    os.system('sudo mount --bind /%s /jail/%s' % (dir, dir) )
+
+if not os.path.exists('/jail/runs/autobot/submissions'):
+    os.system('sudo mkdir -p /jail/runs/autobot/submissions')
+
 # Now to run syncdb - settings should already be in place
 # It would not have come to this level else
 # currently running manage.py syndb, how to call it here ?
@@ -94,4 +108,3 @@ os.system('sudo bash ./build_secexec.sh')
 # TODO: copy media to /usr/share/checker/media - DOcRoot has already added
 # TODO: Default populate
 # TODO: Run a Unit test 
-# TODO: Run setuid generation - secexec.o 
