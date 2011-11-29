@@ -1,4 +1,5 @@
 import os
+import stat
 import subprocess
 import checker.cc_backend.se.secexec as secexec
 
