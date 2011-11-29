@@ -12,7 +12,7 @@ class Evaluate:
             input_file = os.path.join(self.config.abs_path, str(submission["id"]), str(index)) + '.in'
             input_fp = open(input_file, 'w')
             input_fp.write(input_file_content)
-            input_fp.close()
+            input_fp.close()  
     
     def _set_submission_references(self, submission, test_set):
         submission_reference_base = os.path.join(self.reference_outputs_base, str(submission["id"]))
