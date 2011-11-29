@@ -41,15 +41,35 @@ class Evaluate:
         max_file_size = 32
 
         #Assumption: each infile would be of the form submission_id.in
+        effective_user_id = 10000 + long(submission["id"]) % 10000
         for (index, input_file) in enumerate(test_set["inputs"]):
-            index_file_base = os.path.join(self.config.abs_path, str(submission["id"]), str(index))
-            print index_file_base
-            input_file = index_file_base + '.in'
-            out_file = index_file_base + '.out'
-            error_file = index_file_base + '.err'
+            abs_index_file_base = os.path.join(self.config.abs_path, str(submission["id"]), str(index))
+            runs_index_file_base = os.path.join(self.config.run_path, str(submission["id"]), str(index))
+            
+            abs_input_file = abs_index_file_base + '.in'
+            abs_out_file = abs_index_file_base + '.out'
+            abs_error_file = abs_index_file_base + '.err'
+            
+            input_file = runs_index_file_base + '.in'
+            out_file = runs_index_file_base + '.out'
+            error_file = runs_index_file_base + '.err'
+
+            os.system('touch %s' % abs_out_file)
+            os.system('touch %s' % abs_error_file)
+            
+            os.system('chown %d %s' % (effective_user_id, abs_input_file))
+            os.system('chown %d %s' % (effective_user_id, abs_out_file))
+            os.system('chown %d %s' % (effective_user_id, abs_error_file))
+            
+            os.chmod(abs_input_file, stat.S_IRUSR)
+            os.chmod(abs_out_file, stat.S_IRUSR | stat.S_IWUSR)
+            os.chmod(abs_error_file, stat.S_IRUSR | stat.S_IWUSR)
+            
+            executable_file = os.path.join(self.config.abs_path, str(submission['id']), 'solution.exe')
+            os.system('chown %d %s' % (effective_user_id, executable_file))
+            os.chmod(executable_file, stat.S_IRUSR | stat.S_IXUSR)
             
             reference_file = os.path.join(self.reference_outputs_base, str(submission["id"]), str(index) + '.ref')
-            effective_user_id = 10000 + long(submission["id"]) % 10000
             
             args = ["--infile=%s" % input_file,
                     "--outfile=%s" % out_file,
@@ -68,7 +88,7 @@ class Evaluate:
                # use the custom executable to run
                pass
             else:
-                check = subprocess.Popen('diff -Bb %s %s' % (out_file, reference_file), shell=True, stdout=subprocess.PIPE)
+                check = subprocess.Popen('diff -Bb %s %s' % (abs_out_file, reference_file), shell=True, stdout=subprocess.PIPE)
                 diff_op = check.communicate()[0]
                 if diff_op == '':
                     #testcase passed
