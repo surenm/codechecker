@@ -1,6 +1,5 @@
 import os
 import subprocess
-from os.path import splitext
 import checker.cc_backend.se.secexec as secexec
 
 class Evaluate:
