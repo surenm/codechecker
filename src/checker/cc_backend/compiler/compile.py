@@ -8,6 +8,8 @@ class Compiler:
     def compile_source(self, source_filepath, lang=None):
 		compiler = self.get_compiler(source_filepath, lang)
 		compile_cmd = compiler.get_compile_cmd(source_filepath)
+		if not compile_cmd:
+		    return None
 		child = subprocess.Popen(compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 		out, err = child.communicate()
 		
@@ -33,10 +35,6 @@ class Compiler:
             return Java_Compiler(self.config)
 
 class C_Compiler:
-    """
-    This is a language specific compiler class. It needs all the
-    methods needed below below.
-    """
     def __init__(self, config):
         self.config = config
         self.compile_cmd = config.config.get("CompileCommands", "C_compile")
@@ -92,4 +90,11 @@ class Py_Compiler:
         return self.exec_string
 
 class Java_Compiler:
-    pass
+    def __init__(self, config):
+        pass
+    def _get_executable_path(self, source_path):
+        pass
+    def get_compile_cmd(self, source_path):
+        pass
+    def get_run_cmd(self, source_path):
+        pass
