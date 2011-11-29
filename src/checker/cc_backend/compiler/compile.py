@@ -56,7 +56,22 @@ class C_Compiler:
 
 #TODO: Things were breaking here
 class CPP_Compiler:
-    pass
+    def __init__(self, config):
+        self.config = config
+        self.compile_cmd = config.config.get("CompileCommands", "CPP_compile")
+        self.exec_string = config.config.get("CompileCommands", "CPP_run")
+        
+    def _get_executable_path(self, source_path):
+        base_directory = os.path.dirname(source_path)
+        return os.path.join(base_directory, 'solution.exe')
+
+    def get_compile_cmd(self, source_path):
+        # source path is a complete path without considering JAIL. Because compilation happens outside JAIL 
+        executable = self._get_executable_path(source_path)
+        return self.compile_cmd.replace("%s", source_path).replace("%e", executable)
+
+    def get_run_cmd(self, source_path):
+        return self.exec_string
 
 class Py_Compiler:
     pass
