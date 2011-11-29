@@ -13,7 +13,9 @@ from score.score import Score
 from Config import Config
 
 logger = logging.getLogger('main')
-
+handler = logging.FileHandler('/tmp/run.log')
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 def wait_for_submission(store):
     """
@@ -38,12 +40,14 @@ def compile_submission(compiler, store, submission):
     store. Return True or False.
     """
     compiler_result = compiler.compile_source(submission['source_file'])
- 
+    if not compiler_result:
+        return None
+        
     if compiler_result["retcode"] == 0:
         store.set_compile_status("CMPS", submission_id=submission["id"])
         return compiler_result
     else:
-        store.set_compile_status("CMPE", err_msg=status_info.err_msg, submission_id=submission["id"])
+        store.set_compile_status("CMPE", err_msg=compiler_result['compiler_output'], submission_id=submission["id"])
         return None
 
 
@@ -56,7 +60,7 @@ def main():
 
     # Each iteration of the loop below evalutes a submission.
     for submission in wait_for_submission(store):
-        logger.info("Starting to process submission %s" % str(submission))
+        logger.info("Starting to process submission %s" % str(submission['id']))
         # compile the submission
     
         compiler_result = compile_submission(compiler, store, submission)
@@ -86,7 +90,7 @@ def main():
         #final_score = score.overall(test_group_scores, problem_id=prob_id)
         #store.set_submission_score(final_score, submission_id=submission["id"])
         #store.set_submission_run_status("PASS", submission_id=submission["id"])
-        logger.info("Starting to process submission %s" % str(submission))
+        logger.info("Completed submission %s" % str(submission["id"]))
 
 if __name__ == '__main__':
     main()
