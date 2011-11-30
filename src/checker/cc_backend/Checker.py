@@ -5,6 +5,8 @@ import string
 import time
 import threading
 import logging
+import zmq
+import json
 
 from store.default_store import Default
 from evaluator.eval import Evaluate
@@ -52,6 +54,46 @@ def compile_submission(compiler, store, submission):
 
 
 def main():
+    config = Config("/usr/local/etc/checker/codechecker.conf")
+    store = Default(config)
+    compiler = Compiler(config)
+    evaluator = Evaluate(config)
+
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind('tcp://*:5555')
+    while True:
+        try: 
+            request_object = socket.recv()
+            request = json.loads(request_object)
+            new_submission = store.set_submission(request)
+            submission = store.get_submission_by_id(new_submission.id)
+            
+            compiler_result = compile_submission(compiler, store, submission)
+            if compiler_result == None:
+                continue
+
+            # Evaluate the queued submission. Somewhere in the following
+            # loop it is also possible that the program fails - need to
+            # set the status to runtime error status.
+            for testset in store.get_all_testsets(submission["problem"]):
+                testset_info = testset
+                testset_info["inputs"] = []
+                testset_info["reference_outputs"] = []
+                for testcase in store.get_all_testcases(testset["id"]):
+                    testset_info["inputs"].append(testcase["input"])
+                    testset_info["reference_outputs"].append(testcase["reference_output"])
+
+                result_set = evaluator.eval_submission(submission, testset_info, compiler_result["run_command"])
+        
+            socket.send("Hello world")
+            
+        except Exception as e:
+            print e
+            socket.send("error")
+
+
+def CheckerInfiniteLoop():
     config = Config("/usr/local/etc/checker/codechecker.conf")
     store = Default(config)
     compiler = Compiler(config)

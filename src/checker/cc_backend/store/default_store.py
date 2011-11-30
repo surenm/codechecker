@@ -1,5 +1,5 @@
 import os
-from checker.cc_frontend.web.models import Contest, Problem, Submission, TestSet, Testcase
+from checker.cc_frontend.web.models import Contest, Problem, Submission, TestSet, Testcase, User
 from storage_interface import Store
 
 class Default(Store):
@@ -27,6 +27,29 @@ class Default(Store):
             src_file.close()
         
         return src_fname
+        
+    def set_submission(self, request):
+        submission = Submission()
+        submission.user = User.objects.get(id=2)
+        problem = Problem.objects.get(id=1)
+        submission.problem = problem
+        submission.language = request['language']
+        submission.code = request['code']
+        submission.errors = ''
+        submission.save()
+        return submission
+    
+    def get_submission_by_id(self, _id):
+        submission = Submission.objects.get(id=_id)
+        source_file = self.__init_submission__(submission)
+        
+        ret = {}
+        ret['source_file'] = source_file
+        ret['id'] = submission.pk
+        ret['problem'] = int(submission.problem.pk)
+        ret['language'] = str(submission.language)
+        
+        return ret
         
         
     def get_submission(self):

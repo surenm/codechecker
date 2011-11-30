@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
 from django import forms
+import datetime
 
 # Current Language types that are supported
 LANG_TYPES = (
@@ -103,7 +104,7 @@ class Submission(models.Model):
     user = models.ForeignKey(User)
     problem = models.ForeignKey(Problem)
     result = models.CharField(max_length=4, choices=RESULT_TYPES, default="QU")
-    time = models.DateTimeField()
+    time = models.DateTimeField(default=datetime.datetime.now())
     language = models.CharField(max_length=10, choices=LANG_TYPES)
     penalty = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
