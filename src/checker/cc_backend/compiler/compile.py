@@ -79,7 +79,6 @@ class Py_Compiler:
         
     def _get_executable_path(self, source_path):
         base_directory = os.path.dirname(source_path)
-        os.system('cp %s %s' % (source_path, os.path.join(base_directory, 'solution.exe')))
         return os.path.join(base_directory, 'solution.py')
 
     def get_compile_cmd(self, source_path):
