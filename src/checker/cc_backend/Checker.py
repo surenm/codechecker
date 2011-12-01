@@ -55,6 +55,7 @@ def compile_submission(compiler, store, submission):
 
 def main():
     config = Config("/usr/local/etc/checker/codechecker.conf")
+    print "Starting checker"
     store = Default(config)
     compiler = Compiler(config)
     evaluator = Evaluate(config)
@@ -70,9 +71,11 @@ def main():
             submission = store.get_submission_by_id(new_submission.id)
             
             compiler_result = compile_submission(compiler, store, submission)
+            
             if compiler_result == None:
+                socket.send("compile result none")
                 continue
-
+            print compiler_result
             # Evaluate the queued submission. Somewhere in the following
             # loop it is also possible that the program fails - need to
             # set the status to runtime error status.
@@ -85,11 +88,11 @@ def main():
                     testset_info["reference_outputs"].append(testcase["reference_output"])
 
                 result_set = evaluator.eval_submission(submission, testset_info, compiler_result["run_command"])
-        
-            socket.send("Hello world")
+
+            socket.send("Hello Fucking world")
             
         except Exception as e:
-            print e
+            print e, type(e)
             socket.send("error")
 
 
