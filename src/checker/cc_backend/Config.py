@@ -13,11 +13,7 @@ class Config:
         self.outputLimit = int(self.config.get("BackendMain","OutputFileSizeLimit"))
         self.heapsize = self.config.get("RuntimeLimits", "HeapSize")
         self.reference_outputs_path = self.config.get("BackendMain", "ReferencesPath")
-        
-        # Check if setuid_helper exists.
-        self.shPath = "/usr/local/bin/checker/setuid_helper"
-        assert os.path.isfile(self.shPath) and os.access(self.shPath, os.X_OK)
-        
+                
 
 if __name__ == "__main__":
     
