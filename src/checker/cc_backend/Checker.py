@@ -89,11 +89,11 @@ def main():
 
                 result_set = evaluator.eval_submission(submission, testset_info, compiler_result["run_command"])
 
-            socket.send("Hello Fucking world")
+            socket.send("Hello world")
             
         except Exception as e:
             print e, type(e)
-            socket.send("error")
+            socket.send("Hello world")
 
 
 def CheckerInfiniteLoop():
