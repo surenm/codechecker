@@ -26,8 +26,18 @@ class Evaluate:
             reference_fp.write(reference_file_content)
             reference_fp.close()
     
-    def _get_run_cmd(self, submission, exec_string):
+    def _get_executable(self, submission):
         executable = os.path.join(self.config.abs_path, str(submission['id']), 'solution.exe')
+        if submission["language"] == 'py':
+            executable = os.path.join(self.config.abs_path, str(submission['id']), 'solution.py')
+        return executable
+
+    def _get_run_cmd(self, submission, exec_string):
+        executable = os.path.join(self.config.run_path, str(submission['id']), 'solution.exe')
+        if submission["language"] == 'py':
+            executable = os.path.join(self.config.run_path, str(submission['id']), 'solution.py')
+            return executable
+
         return exec_string.replace("%e", executable)
 
     def eval_submission(self, submission, test_set, run_template):
