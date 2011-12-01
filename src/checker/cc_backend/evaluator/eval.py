@@ -77,6 +77,7 @@ class Evaluate:
             os.chmod(abs_error_file, stat.S_IRUSR | stat.S_IWUSR)
             
             executable_file = os.path.join(self.config.abs_path, str(submission['id']), 'solution.exe')
+            executable_file = self._get_executable(submission)
             os.system('chown %d %s' % (effective_user_id, executable_file))
             os.chmod(executable_file, stat.S_IRUSR | stat.S_IXUSR)
             
