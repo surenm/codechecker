@@ -39,7 +39,7 @@ int secure_spawn(ExecArgs ea) {
 
         //drop privileges
       
-        setuid(ea.euid);    
+        //setuid(ea.euid);    
         freopen(ea.infile, "r", stdin); 
         freopen(ea.outfile, "w", stdout);
         freopen(ea.errfile, "w", stderr);
