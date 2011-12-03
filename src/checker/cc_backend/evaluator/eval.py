@@ -60,21 +60,14 @@ class Evaluate:
             abs_input_file = abs_index_file_base + '.in'
             abs_out_file = abs_index_file_base + '.out'
             abs_error_file = abs_index_file_base + '.err'
-            
-            input_file = runs_index_file_base + '.in'
-            out_file = runs_index_file_base + '.out'
-            error_file = runs_index_file_base + '.err'
 
             os.system('touch %s' % abs_out_file)
             os.system('touch %s' % abs_error_file)
+            os.system('chown -R %d %s' % (effective_user_id, os.path.join(self.config.abs_path, str(submission["id"]))))
             
-            os.system('chown %d %s' % (effective_user_id, abs_input_file))
-            os.system('chown %d %s' % (effective_user_id, abs_out_file))
-            os.system('chown %d %s' % (effective_user_id, abs_error_file))
-            
-            os.chmod(abs_input_file, stat.S_IRUSR)
-            os.chmod(abs_out_file, stat.S_IRUSR | stat.S_IWUSR)
-            os.chmod(abs_error_file, stat.S_IRUSR | stat.S_IWUSR)
+            os.chmod(abs_input_file, stat.S_IRUSR | stat.S_IROTH)
+            os.chmod(abs_out_file, stat.S_IRUSR | stat.S_IWUSR | stat.S_IWOTH | stat.S_IROTH)
+            os.chmod(abs_error_file, stat.S_IRUSR | stat.S_IWUSR | stat.S_IWOTH | stat.S_IROTH)
             
             executable_file = os.path.join(self.config.abs_path, str(submission['id']), 'solution.exe')
             executable_file = self._get_executable(submission)
@@ -83,9 +76,9 @@ class Evaluate:
             
             reference_file = os.path.join(self.reference_outputs_base, str(submission["id"]), str(index) + '.ref')
             
-            args = ["--infile=%s" % input_file,
-                    "--outfile=%s" % out_file,
-                    "--errfile=%s" % error_file,
+            args = ["--infile=%s" % abs_input_file,
+                    "--outfile=%s" % abs_out_file,
+                    "--errfile=%s" % abs_error_file,
                     "--memlimit=%d" % mlimit,
                     "--timelimit=%d" % tlimit,
                     "--maxfilesz=%d" % max_file_size,
@@ -95,19 +88,6 @@ class Evaluate:
             
             ret_code = secexec.secure_spawn(args) 
 
-            #End of executing the submission_exec
-            if test_set["is_cust_scored"] == True:
-               # use the custom executable to run
-               pass
-            else:
-                check = subprocess.Popen('diff -Bb %s %s' % (abs_out_file, reference_file), shell=True, stdout=subprocess.PIPE)
-                diff_op = check.communicate()[0]
-                if diff_op == '':
-                    #testcase passed
-                    pass
-                else:
-                    #testcase failed
-                    pass
-            pass
-        pass
-    pass
+            response = [] 
+        return response
+    

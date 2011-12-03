@@ -26,24 +26,24 @@ int secure_spawn(ExecArgs ea) {
 
     p = fork();
     if (!p) { 
-
+        freopen(ea.infile, "r", stdin); 
+        freopen(ea.outfile, "w", stdout);
+        freopen(ea.errfile, "w", stderr);
+        
         chdir(ea.jailroot);
-        chroot(ea.jailroot);
+        ret = chroot(ea.jailroot);
 #ifdef JAIL
         FILE *fp = fopen("/chstuff", "a");
         if(fp) {
+            fprintf(fp, "Jail root: %s\n", ea.jailroot);
             fprintf(fp, "ret = %d errno = %d\n", ret, errno);
             fclose(fp);
         }
 #endif /* JAIL */
 
         //drop privileges
-      
-        //setuid(ea.euid);    
-        freopen(ea.infile, "r", stdin); 
-        freopen(ea.outfile, "w", stdout);
-        freopen(ea.errfile, "w", stderr);
-
+        setuid(ea.euid);    
+        
         struct rlimit lim ;
         lim.rlim_cur = lim.rlim_max = 4; 
         ret = setrlimit(RLIMIT_NPROC, &lim);

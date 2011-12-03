@@ -15,7 +15,7 @@ from score.score import Score
 from Config import Config
 
 logger = logging.getLogger('main')
-handler = logging.FileHandler('/tmp/run.log')
+handler = logging.StreamHandler()
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
@@ -54,8 +54,8 @@ def compile_submission(compiler, store, submission):
 
 
 def main():
+    print "Starting Checker"
     config = Config("/usr/local/etc/checker/codechecker.conf")
-    print "Starting checker"
     store = Default(config)
     compiler = Compiler(config)
     evaluator = Evaluate(config)
@@ -63,22 +63,30 @@ def main():
     context = zmq.Context()
     socket = context.socket(zmq.REP)
     socket.bind('tcp://*:5555')
+    print "Bound to ZMQ socket"
     while True:
         try: 
+            response = {}
             request_object = socket.recv()
+            print "Request is %s" % request_object
             request = json.loads(request_object)
             new_submission = store.set_submission(request)
             submission = store.get_submission_by_id(new_submission.id)
             
+            
             compiler_result = compile_submission(compiler, store, submission)
+            response['compiler_output'] = compiler_result['compiler_output']
             
             if compiler_result == None:
-                socket.send("compile result none")
+                response['compile_status'] = False
+
+                print "Compile failed - %s" % str(response)
+                socket.send(json.dumps(response))
                 continue
-            print compiler_result
-            # Evaluate the queued submission. Somewhere in the following
-            # loop it is also possible that the program fails - need to
-            # set the status to runtime error status.
+            
+            # if we have come here, then we have passed compilation
+            response['compile_status'] = True
+            response['outputs'] = []
             for testset in store.get_all_testsets(submission["problem"]):
                 testset_info = testset
                 testset_info["inputs"] = []
@@ -87,55 +95,20 @@ def main():
                     testset_info["inputs"].append(testcase["input"])
                     testset_info["reference_outputs"].append(testcase["reference_output"])
 
-                result_set = evaluator.eval_submission(submission, testset_info, compiler_result["run_command"])
+                results = evaluator.eval_submission(submission, testset_info, compiler_result["run_command"])
 
-            socket.send("Hello world")
-            
+                for result in results:
+                    response['outputs'].append((result['input'], result['output']))
+
+            socket.send(json.dumps(response))
+
         except Exception as e:
             print e, type(e)
-            socket.send("Hello world")
+            response['error_type'] = type(e)
+            response['error'] = e
+            socket.send("Error processing submission.")
 
-
-def CheckerInfiniteLoop():
-    config = Config("/usr/local/etc/checker/codechecker.conf")
-    store = Default(config)
-    compiler = Compiler(config)
-    evaluator = Evaluate(config)
-    score = Score()
-
-    # Each iteration of the loop below evalutes a submission.
-    for submission in wait_for_submission(store):
-        logger.info("Starting to process submission %s" % str(submission['id']))
-        # compile the submission
-    
-        compiler_result = compile_submission(compiler, store, submission)
-        if compiler_result == None:
-            continue
-
-        # Evaluate the queued submission. Somewhere in the following
-        # loop it is also possible that the program fails - need to
-        # set the status to runtime error status.
-        test_group_scores = []
-        for testset in store.get_all_testsets(submission["problem"]):
-            testset_info = testset
-            testset_info["inputs"] = []
-            testset_info["reference_outputs"] = []
-            for testcase in store.get_all_testcases(testset["id"]):
-                testset_info["inputs"].append(testcase["input"])
-                testset_info["reference_outputs"].append(testcase["reference_output"])
-           
-            result_set = evaluator.eval_submission(submission, testset_info, compiler_result["run_command"])
-        
-            #TODO: implement the below functions properly.
-            #test_grp_score = score.score_group(prob_id, result_set)
-            #store.set_test_group_score(test_grp_score, problem_id=prob_id, test_group_id=test_grp["id"], submission_id=submission["id"])
-            #test_group_scores.append(test_grp_score)
-
-        # compute and set the overall score.
-        #final_score = score.overall(test_group_scores, problem_id=prob_id)
-        #store.set_submission_score(final_score, submission_id=submission["id"])
-        #store.set_submission_run_status("PASS", submission_id=submission["id"])
-        logger.info("Completed submission %s" % str(submission["id"]))
+        logger.info("Completed processing %s" % str(submission["id"]))
 
 if __name__ == '__main__':
     main()
